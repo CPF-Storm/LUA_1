@@ -3,6 +3,8 @@ local grid = {}
 local width, height
 local cells = {}
 
+
+
 function grid.init(w, h)
     width = w
     height = h
@@ -61,26 +63,36 @@ end
 
 function grid.clearLines()
     local linesCleared = 0
-    for y = height, 1, -1 do
-        local full = true
+    local y = height
+
+    while y >= 1 do
+        local fullRow = true
         for x = 1, width do
             if cells[y][x] == 0 then
-                full = false
+                fullRow = false
                 break
             end
         end
-        if full then
+
+        if fullRow then
+            -- Shift 
             for row = y, 2, -1 do
-                cells[row] = table.move(cells[row - 1], 1, width, 1, {})
+                for x = 1, width do
+                    cells[row][x] = cells[row - 1][x]
+                end
             end
-            cells[1] = {}
+            -- Clear 
             for x = 1, width do
                 cells[1][x] = 0
             end
+
             linesCleared = linesCleared + 1
-            y = y + 1
+            
+        else
+            y = y - 1
         end
     end
+
     return linesCleared
 end
 
@@ -93,6 +105,15 @@ function grid.draw(cellSize)
                 love.graphics.rectangle("fill", (x - 1) * cellSize, (y - 1) * cellSize, cellSize, cellSize)
             end
         end
+    end
+
+   
+    love.graphics.setColor(0.2, 0.2, 0.2)
+    for y = 0, height do
+        love.graphics.line(0, y * cellSize, width * cellSize, y * cellSize)
+    end
+    for x = 0, width do
+        love.graphics.line(x * cellSize, 0, x * cellSize, height * cellSize)
     end
 
     

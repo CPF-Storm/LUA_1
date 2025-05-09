@@ -1,6 +1,6 @@
 local grid = require("grid")
 local piece = require("piece")
-local pieces = require("pieces")
+
 
 local game = {}
 
@@ -44,24 +44,32 @@ function game.update(dt)
         fallTimer = 0
         if not grid.tryMove(currentPiece, 0, 1) then
             grid.lockPiece(currentPiece)
-            grid.clearLines()
+        
+            local lines = grid.clearLines() 
+            if lines > 0 then
+                score = score + (lines == 1 and 100 or lines == 2 and 300 or lines == 3 and 500 or 800)
+            end
+        
             spawnNewPiece()
         end
-    end
-
-    local lines = grid.clearLines()
-    local lineScores = { [1] = 100, [2] = 300, [3] = 500, [4] = 800 }
-    if lines > 0 then
-        score = score + (lineScores[lines] or lines * 100)
-    end
-
-
 end
+end
+    
+
 
 function game.draw()
     grid.draw(cellSize)
     piece.draw(currentPiece, cellSize)
 
+
+    
+love.graphics.setColor(1, 1, 1)
+love.graphics.print("Next:", 330, 10)
+piece.draw(nextPiece, 20, 330, 40)
+
+
+love.graphics.setColor(1, 1, 1)
+love.graphics.print("Score: " .. score, 330, 140)
 
 
 if paused then
