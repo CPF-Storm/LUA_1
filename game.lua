@@ -72,6 +72,20 @@ love.graphics.setColor(1, 1, 1)
 love.graphics.print("Score: " .. score, 330, 140)
 
 
+
+    love.graphics.print("Controls:", 330, 250)
+    
+    love.graphics.print("Left or right  Move", 330, 270)
+    
+    love.graphics.print("Down           Soft Drop", 330, 290)
+    
+    love.graphics.print("Space           Pause", 330, 310)
+    
+    love.graphics.print("Up                Rotate", 330, 330)
+
+    
+
+
 if paused then
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("PAUSED", 330, 180)
